@@ -16,7 +16,7 @@
 
     LauncherViewController *launcherVC = [LauncherViewController new];
     
-UINavigationController* navigationVC = [[UINavigationController alloc] initWithRootViewController:launcherVC];
+    UINavigationController* navigationVC = [[UINavigationController alloc] initWithRootViewController:launcherVC];
     navigationVC.modalPresentationStyle = UIModalPresentationCurrentContext;
     [self addChildViewController:navigationVC];
 

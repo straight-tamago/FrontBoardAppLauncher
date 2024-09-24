@@ -28,10 +28,10 @@
         // At this point, the process is spawned and we're ready to create a scene to render in our app
         RBSProcessHandle* processHandle = [RBSProcessHandle handleForPredicate:predicate error:nil];
         [manager registerProcessForAuditToken:processHandle.auditToken];
-        NSString *identifier = [NSString stringWithFormat:@"sceneID:%@-%@", bundleID, @"default"];
+        self.identifier = [NSString stringWithFormat:@"sceneID:%@-%@", bundleID, @"default"];
 
         FBSMutableSceneDefinition *definition = [FBSMutableSceneDefinition definition];
-        definition.identity = [FBSSceneIdentity identityForIdentifier:identifier];
+        definition.identity = [FBSSceneIdentity identityForIdentifier:self.identifier];
         definition.clientIdentity = [FBSSceneClientIdentity identityForProcessIdentity:identity];
         definition.specification = [UIApplicationSceneSpecification specification];
         FBSMutableSceneParameters *parameters = [FBSMutableSceneParameters parametersForSpecification:definition.specification];
@@ -64,7 +64,7 @@
         // TODO: get app display name
         self.navigationItem.title = scene.clientProcess.name;
 
-        self.presenter = [scene.uiPresentationManager createPresenterWithIdentifier:identifier];
+        self.presenter = [scene.uiPresentationManager createPresenterWithIdentifier:self.identifier];
         [self.presenter activate];
         [self insertSubview:self.presenter.presentationView atIndex:0];
     }];
@@ -78,6 +78,7 @@
     animations:^{
         self.hidden = YES;
     } completion:^(BOOL b){
+        [[FBSceneManager sharedInstance] destroyScene:self.identifier withTransitionContext:nil];
         [self.presenter deactivate];
         [self.presenter invalidate];
         [self removeFromSuperview];
